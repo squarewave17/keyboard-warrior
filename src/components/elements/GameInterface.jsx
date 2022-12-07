@@ -1,10 +1,12 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import keypress from "../../assets/sounds/keypress.mp3";
 import keypressReverse from "../../assets/sounds/keypressReverse.mp3";
 import wordCorrect from "../../assets/sounds/wordCorrect.mp3";
 import wordError from "../../assets/sounds/error.mp3";
+import GlobalContext from "../../context/GlobalContext";
 
 function GameInterface({ target }) {
+  const { sound, gameMode } = useContext(GlobalContext);
   //Get word
   const getRandomWord = () => {
     return target[Math.floor(Math.random() * target.length)];
@@ -13,6 +15,7 @@ function GameInterface({ target }) {
   //currentTarget
   const [currentTarget, setCurrentTarget] = useState(getRandomWord);
   const targetValueArr = currentTarget.split("");
+
   // Sound Effects
   const keySound = new Audio(keypress);
   const keySoundRev = new Audio(keypressReverse);
@@ -21,12 +24,32 @@ function GameInterface({ target }) {
   audioCorrect.volume = 0.3;
   audioError.volume = 0.5;
 
+  const playSound = (x) => {
+    if (sound)
+      switch (x) {
+        case "press":
+          keySound.play();
+          break;
+        case "delete":
+          keySoundRev.play();
+          break;
+        case "correct":
+          if (!gameMode) audioCorrect.play();
+          break;
+        case "error":
+          audioError.play();
+          break;
+      }
+  };
+  // END Sound effects
+
   // Focus Cursor
   const inputFocusRef = useRef();
 
   useEffect(() => {
     inputFocusRef.current.focus();
   }, [inputFocusRef]);
+  // END Focus Sursor
 
   //Input State
   const [inputValue, setInputValue] = useState("");
@@ -39,19 +62,19 @@ function GameInterface({ target }) {
     // check if liveValueArr array matches targetValueArr array
     if (liveValueArr.every((value, index) => value === targetValueArr[index])) {
       if (liveValue > inputValue) {
-        keySound.play();
+        playSound("press");
       } else {
-        keySoundRev.play();
+        playSound("delete");
       }
       setInputValue(liveValue);
     } else {
-      audioError.play();
+      playSound("error");
     }
   };
 
   useEffect(() => {
     if (currentTarget === inputValue) {
-      audioCorrect.play();
+      playSound("correct");
       setCurrentTarget(getRandomWord);
       setInputValue("");
     }
