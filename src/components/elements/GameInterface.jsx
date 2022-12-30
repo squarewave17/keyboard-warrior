@@ -7,6 +7,7 @@ import GlobalContext from "../../context/GlobalContext";
 
 function GameInterface({ target }) {
   const { sound, gameMode } = useContext(GlobalContext);
+
   //Get word
   const getRandomWord = () => {
     return target[Math.floor(Math.random() * target.length)];
@@ -15,6 +16,13 @@ function GameInterface({ target }) {
   //currentTarget
   const [currentTarget, setCurrentTarget] = useState(getRandomWord);
   const targetValueArr = currentTarget.split("");
+  // const synth = window.speechSynthesis;
+
+  // useEffect(() => {
+  //   const utterThis = new SpeechSynthesisUtterance(currentTarget);
+
+  //   synth.speak(utterThis);
+  // }, [currentTarget]);
 
   // Sound Effects
   const keySound = new Audio(keypress);
@@ -34,7 +42,7 @@ function GameInterface({ target }) {
           keySoundRev.play();
           break;
         case "correct":
-          if (!gameMode) audioCorrect.play();
+          if (gameMode !== "keys") audioCorrect.play();
           break;
         case "error":
           audioError.play();

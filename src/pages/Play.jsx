@@ -3,6 +3,6 @@ import BasicWords from "../assets/words/BasicWords";
 import CommonWords from "../assets/words/CommonWords";
 import Alphabet from "../assets/words/Alphabet";
 function Words() {
-  return <GameInterface target={Alphabet} />;
+  return <GameInterface target={CommonWords} />;
 }
 export default Words;

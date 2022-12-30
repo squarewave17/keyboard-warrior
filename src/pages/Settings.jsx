@@ -10,12 +10,11 @@ function Settings() {
             </div>
 
             <div>
-              <select className="select w-full max-w-xs">
-                <option>Alphabet</option>
-                <option>Most Common Words</option>
-                <option>Developer</option>
+              <select className="select select-sm w-full max-w-xs">
+                <option>Keys</option>
+                <option>Words</option>
                 <option>Phrases</option>
-                <option>Custom</option>
+                <option>Developer</option>
               </select>
             </div>
           </div>
